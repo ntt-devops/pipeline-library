@@ -1,0 +1,29 @@
+---
+name: Called Workflow - Semantic Release
+
+on:
+  workflow_call:
+    inputs:
+      RELEASE_BRANCH:
+        required: false
+        type: string
+    secrets:
+      envPAT:
+        required: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.envPAT }}
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install -g semantic-release @semantic-release/git @semantic-release/exec
+          semantic-release --branches ${{ inputs.RELEASE_BRANCH }}
+
