@@ -52,6 +52,10 @@ jobs:
           format: 'json'
           output: 'container-scanning-report.json'
 
+      - name: Import Defectdojo
+        run: |
+          python3 importtodefectdojo.py 'container-scanning-report.json' 'Trivy Scan'
+
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
