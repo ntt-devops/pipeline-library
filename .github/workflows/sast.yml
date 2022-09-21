@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Plugins
         run: |
-          npm install -g snyk snyk-to-html
+          npm install snyk snyk-to-html
           apt-get update
           apt-get install python3-pip -y
           python3 -m pip install requests
