@@ -1,0 +1,42 @@
+---
+name: Called Workflow - Get Version
+
+on:
+  workflow_call:
+    inputs:
+      CHART_PATH:
+        required: true
+        type: string
+      BACKEND_VALUES_FILE:
+        required: true
+        type: string
+      FRONTEND_VALUES_FILE:
+        required: true
+        type: string
+    secrets:
+      GITLAB_TOKEN:
+        required: false
+        type: string
+
+jobs:
+  get_version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.TEST_TOKEN }}
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install -g semantic-release @semantic-release/git @semantic-release/exec
+          semantic-release --branches ${{ inputs.RELEASE_BRANCH }} --dry-run
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.env
+          path: build.env
+          retention-days: 5
