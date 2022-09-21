@@ -4,15 +4,6 @@ name: Called Workflow - Get Version
 on:
   workflow_call:
     inputs:
-      CHART_PATH:
-        required: false
-        type: string
-      BACKEND_VALUES_FILE:
-        required: false
-        type: string
-      FRONTEND_VALUES_FILE:
-        required: false
-        type: string
       RELEASE_BRANCH:
         required: false
         type: string
