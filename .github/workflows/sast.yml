@@ -3,7 +3,9 @@ name: Called Workflow - SAST
 
 on:
   workflow_call:
-
+    secrets:
+      envPAT:
+        required: false
 jobs:
   sast_scan:
     name: SAST
@@ -30,7 +32,7 @@ jobs:
 
       - name: Snyk monitor
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.envPAT }}
         run: |
           snyk code test --json > sast-code-results.json || exit_code=$?
           snyk test --json > sast-results.json || exit_code=$?
