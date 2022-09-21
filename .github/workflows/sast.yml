@@ -1,0 +1,49 @@
+---
+name: Called Workflow - SAST
+
+on:
+  workflow_call:
+
+jobs:
+  sast_scan:
+    name: SAST
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Python
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install Plugins
+        run: |
+          npm install -g snyk snyk-to-html
+          apt-get update
+          apt-get install python3-pip -y
+          python3 -m pip install requests
+          # mkdir reports
+
+      - name: Run Snyk Scans
+        run: |
+          snyk code test --json > sast-code-results.json || exit_code=$?
+          snyk test --json > sast-results.json || exit_code=$?
+          if [ $exit_code -ne 0 ]; then echo "checking"; fi;
+          echo "snyk test successful"
+          python3 importtodefectdojo.py sast-results.json 'Snyk Scan'
+          python3 importtodefectdojo.py sast-code-results.json 'Snyk Code Scan'
+
+      - name: 'Upload Artifact1'
+        uses: actions/upload-artifact@v3
+        with:
+          name: sast-code-results.json
+          path: sast-code-results.json
+          retention-days: 5
+
+      - name: 'Upload Artifact2'
+        uses: actions/upload-artifact@v3
+        with:
+          name: sast-results.json
+          path: sast-results.json
+          retention-days: 5
