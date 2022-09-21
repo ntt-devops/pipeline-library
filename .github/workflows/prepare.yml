@@ -1,0 +1,27 @@
+---
+name: Called Workflow - Prepare
+
+on:
+  workflow_call:
+
+jobs:
+  linting:
+    name: Prepare
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Python
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Helm Lint
+        run: |
+          helm lint ${{ env.CHART_PATH }} --values ${{ env.BACKEND_VALUES_FILE }}
+          helm lint ${{ env.CHART_PATH }} --values ${{ env.FRONTEND_VALUES_FILE }}
+
+      - name: Yaml Lint
+        run: |
+          yamllint .
