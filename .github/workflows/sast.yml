@@ -19,13 +19,18 @@ jobs:
 
       - name: Install Plugins
         run: |
-          npm install snyk snyk-to-html
           apt-get update
-          apt-get install python3-pip -y
           python3 -m pip install requests
-          # mkdir reports
 
-      - name: Run Snyk Scans
+      - uses: snyk/actions/setup@master
+
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.13'
+
+      - name: Snyk monitor
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           snyk code test --json > sast-code-results.json || exit_code=$?
           snyk test --json > sast-results.json || exit_code=$?
@@ -33,7 +38,7 @@ jobs:
           echo "snyk test successful"
           python3 importtodefectdojo.py sast-results.json 'Snyk Scan'
           python3 importtodefectdojo.py sast-code-results.json 'Snyk Code Scan'
-
+          
       - name: 'Upload Artifact1'
         uses: actions/upload-artifact@v3
         with:
