@@ -3,6 +3,16 @@ name: Called Workflow - Prepare
 
 on:
   workflow_call:
+    inputs:
+      CHART_PATH:
+        required: true
+        type: string
+      BACKEND_VALUES_FILE:
+        required: true
+        type: string
+      FRONTEND_VALUES_FILE:
+        required: true
+        type: string
 
 jobs:
   linting:
@@ -19,8 +29,8 @@ jobs:
 
       - name: Helm Lint
         run: |
-          helm lint ${{ env.CHART_PATH }} --values ${{ env.BACKEND_VALUES_FILE }}
-          helm lint ${{ env.CHART_PATH }} --values ${{ env.FRONTEND_VALUES_FILE }}
+          helm lint ${{ inputs.CHART_PATH }} --values ${{ inputs.BACKEND_VALUES_FILE }}
+          helm lint ${{ inputs.CHART_PATH }} --values ${{ inputs.FRONTEND_VALUES_FILE }}
 
       - name: Yaml Lint
         run: |
