@@ -21,7 +21,6 @@ jobs:
 
       - name: Install Plugins
         run: |
-          apt-get update
           python3 -m pip install requests
 
       - uses: snyk/actions/setup@master
