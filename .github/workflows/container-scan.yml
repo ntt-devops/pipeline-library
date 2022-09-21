@@ -49,10 +49,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ inputs.IMAGE }}:${{ env.nextReleaseVersion }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          format: 'json'
+          output: 'container-scanning-report.json'
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          name: container-scanning-report.json
+          path: container-scanning-report.json
+          retention-days: 5
