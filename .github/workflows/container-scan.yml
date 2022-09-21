@@ -7,6 +7,9 @@ on:
       IMAGE:
         required: false
         type: string
+      REPORT:
+        required: false
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -50,15 +53,15 @@ jobs:
         with:
           image-ref: '${{ inputs.IMAGE }}:${{ env.nextReleaseVersion }}'
           format: 'json'
-          output: 'container-scanning-report.json'
+          output: '${{ inputs.REPORT }}'
 
       - name: Import Defectdojo
         run: |
-          python3 importtodefectdojo.py 'container-scanning-report.json' 'Trivy Scan'
+          python3 importtodefectdojo.py '${{ inputs.REPORT }}' 'Trivy Scan'
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
-          name: container-scanning-report.json
-          path: container-scanning-report.json
+          name: ${{ inputs.REPORT }}
+          path: ${{ inputs.REPORT }}
           retention-days: 5
