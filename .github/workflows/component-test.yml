@@ -1,0 +1,25 @@
+---
+name: Called Workflow - Component Test
+
+on:
+  workflow_call:
+
+jobs:
+  component_test:
+    name: Component Test
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Custom Tests
+        uses: cypress-io/github-action@v4
+        with:
+          command: npm run test:components
+
+      - name: 'Upload Artifact1'
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend/.results
+          path: frontend/.results
+          retention-days: 5
