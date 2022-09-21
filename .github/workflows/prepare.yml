@@ -42,3 +42,26 @@ jobs:
           npm i eslint-config-next next
           pushd frontend && npm run lint; popd
           pushd backend  && npm run lint; popd
+
+      - name: Audit App Deps
+        continue-on-error: true
+        run: |
+          python3 -m pip install requests
+          cd backend && npm audit --json > npm_audit_backend.json || exit_code=$?
+          cd ../frontend && npm audit --json > npm_audit_frontend.json || exit_code=$?
+          python3 ../importtodefectdojo.py ../backend/npm_audit_backend.json 'NPM Audit Scan'
+          python3 ../importtodefectdojo.py npm_audit_frontend.json 'NPM Audit Scan'
+      
+      - name: 'Upload Artifact 1'
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm_audit_backend.json
+          path: npm_audit_backend.json
+          retention-days: 5
+
+      - name: 'Upload Artifact 2'
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm_audit_frontend.json
+          path: npm_audit_frontend.json
+          retention-days: 5
