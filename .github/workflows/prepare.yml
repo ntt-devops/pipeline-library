@@ -39,6 +39,6 @@ jobs:
       - name: App Lint
         continue-on-error: true
         run: |
-          npm i next eslint
+          npm i eslint-config-next
           pushd frontend && npm run lint; popd
           pushd backend  && npm run lint; popd
