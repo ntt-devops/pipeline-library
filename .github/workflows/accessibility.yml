@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  run-sitespeed:
+  accessibility:
     runs-on: ubuntu-latest
     name: Accessibility Test
     steps:

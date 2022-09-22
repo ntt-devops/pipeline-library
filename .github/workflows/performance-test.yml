@@ -1,0 +1,36 @@
+---
+name: Called Workflow - Performance Test
+
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+      LOAD_TEST_FILE:
+        required: true
+        type: string
+
+jobs:
+  performance_test:
+    runs-on: ubuntu-latest
+    name: Performance Test
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Script
+        run: |
+          apt-get install wget -y
+          wget https://go.dev/dl/go1.18.2.linux-amd64.tar.gz
+          rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.2.linux-amd64.tar.gz
+          export PATH=$PATH:/usr/local/go/bin
+          go install go.k6.io/xk6/cmd/xk6@latest
+          /root/go/bin/xk6 build --with github.com/grafana/xk6-output-prometheus-remote
+          K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6/k6 run ${{ inputs.LOAD_TEST_FILE }} -o output-prometheus-remote
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.ENVIRONMENT }}-result.html
+          path: ${{ inputs.ENVIRONMENT }}-result.html
+          retention-days: 5
