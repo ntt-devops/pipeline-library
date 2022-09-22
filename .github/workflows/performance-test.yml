@@ -12,26 +12,27 @@ on:
         type: string
 
 jobs:
-  performance_test:
-    runs-on: ubuntu-latest
+  k6_performance_test:
     name: Performance Test
+    runs-on: ubuntu-latest
+    container: docker://golang:1.17-alpine
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v1
 
-      - uses: actions/setup-go@v3
-        with:
-          go-version: '^1.13.1'
+      - name: Install xk6
+        run: go install go.k6.io/xk6/cmd/xk6@latest
 
-      - name: Run Script
-        run: |
-          export PATH=$PATH:/usr/local/go/bin
-          go install go.k6.io/xk6/cmd/xk6@latest
-          /root/go/bin/xk6 build --with github.com/grafana/xk6-output-prometheus-remote
-          K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6/k6 run ${{ inputs.LOAD_TEST_FILE }} -o output-prometheus-remote
+      - name: Build xk6-counter binary
+        run: xk6 build --with github.com/mstoykov/xk6-counter@latest
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.ENVIRONMENT }}-result.html
-          path: ${{ inputs.ENVIRONMENT }}-result.html
-          retention-days: 5
+      - name: Run k6 extension test
+        run: K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6 run ./loadtest/backend-test.js -o output-prometheus-remote
+
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{ inputs.ENVIRONMENT }}-result.html
+      #     path: ${{ inputs.ENVIRONMENT }}-result.html
+      #     retention-days: 5
