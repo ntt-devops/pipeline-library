@@ -19,7 +19,9 @@ jobs:
         run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:25.11.0 https://www.sitespeed.io --outputFolder sitespeed-result ${{ inputs.PERFORMANCE_URL }} -b chrome
 
       - name: Move Result
-        run: mv /sitespeed.io/sitespeed-result/data/performance.json browser-performance.json
+        run: |
+          ls -a /sitespeed.io/sitespeed-result/
+          mv /sitespeed.io/sitespeed-result/data/performance.json browser-performance.json
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
