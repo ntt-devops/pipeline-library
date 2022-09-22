@@ -31,7 +31,7 @@ jobs:
         run: |
           sed -i s~REPLACE_WITH_PREVIEW_URL~${{ inputs.URL }}~ ${{ inputs.TESTING_ROOT }}/conf/env.conf
           cat ${{ inputs.TESTING_ROOT }}/conf/env.conf
-          pushd ${{ inputs.TESTING_ROOT }} && mvn ${{ inputs.MAVEN_LOCAL_REPO }} -Dtest=AllTests test -Denv=preview -q
+          pushd ${{ inputs.TESTING_ROOT }} && mvn ${{ inputs.MAVEN_LOCAL_REPO }} -Dtest=AllTests test -Denv=preview -q || true
           
     ## TO COMPLETE ##
     #   - name: Run Script2
