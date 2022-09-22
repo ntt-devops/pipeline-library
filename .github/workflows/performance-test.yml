@@ -16,6 +16,9 @@ jobs:
     name: Performance Test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
       - name: Run k6 local test
         uses: grafana/k6-action@v0.2.0
         with:
