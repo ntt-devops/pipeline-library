@@ -1,0 +1,28 @@
+---
+name: Called Workflow - DAST
+
+on:
+  workflow_call:
+    inputs:
+      DAST_URL:
+        required: false
+        type: string
+jobs:
+  dast_scan:
+    name: DAST
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+          target: '${{ inputs.DAST_URL }}'  
+
+      # - name: 'Upload Artifact1'
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: sast-code-results.json
+      #     path: sast-code-results.json
+      #     retention-days: 5
