@@ -23,7 +23,7 @@ jobs:
         uses: grafana/k6-action@v0.2.0
         with:
           filename: ${{ inputs.LOAD_TEST_FILE }}
-          # flags: -o output-prometheus-remote
+          flags: --env K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write
     # container: docker://golang:1.17-alpine
 
     # steps:
