@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Run k6 local test
         uses: grafana/k6-action@v0.2.0
-        with:m
+        with:
           filename: ${{ inputs.LOAD_TEST_FILE }}
           flags: -o output-prometheus-remote
     # container: docker://golang:1.17-alpine
