@@ -23,7 +23,7 @@ jobs:
         uses: grafana/k6-action@v0.2.0
         with:
           filename: ${{ inputs.LOAD_TEST_FILE }}
-          flags: -o output-prometheus-remote
+          # flags: -o output-prometheus-remote
     # container: docker://golang:1.17-alpine
 
     # steps:
