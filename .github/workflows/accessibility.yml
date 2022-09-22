@@ -19,7 +19,7 @@ jobs:
         run: npm install -g pa11y
 
       - name: Run Test
-        run: pa11y ${{ inputs.ACCESSIBILITY_URL }} > accessibility.json
+        run: pa11y ${{ inputs.ACCESSIBILITY_URL }} --reporter json > accessibility.json
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
