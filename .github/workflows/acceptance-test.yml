@@ -1,0 +1,55 @@
+---
+name: Called Workflow - Acceptance Test
+
+on:
+  workflow_call:
+    inputs:
+      URL:
+        required: true
+        type: string
+      TESTING_ROOT:
+        required: true
+        type: string
+      MAVEN_LOCAL_REPO:
+        required: true
+        type: string
+      # CUCUMBER_REPORT_DIR:
+      #   required: true
+      #   type: string
+
+jobs:
+  run-sitespeed:
+    runs-on: ubuntu-latest
+    name: Acceptance Test
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Maven
+        run: npm install maven
+
+      - name: Run Script
+        run: |
+          sed -i s~REPLACE_WITH_PREVIEW_URL~${{ inputs.URL }}~ ${{ inputs.TESTING_ROOT }}/conf/env.conf
+          cat ${{ inputs.TESTING_ROOT }}/conf/env.conf
+          pushd ${{ inputs.TESTING_ROOT }} && mvn ${{ inputs.MAVEN_LOCAL_REPO }} -Dtest=AllTests test -Denv=preview
+          
+    #   - name: Run Script2
+    #     run: |          
+    #       cd ${{ inputs.TESTING_ROOT }}${{ inputs.CUCUMBER_REPORT_DIR }};
+    # - echo "CI_PIPELINE_IID=${CI_PIPELINE_IID}"
+    # - |
+    #     for FILE in *.json; \
+    #     do \
+    #         echo $FILE && curl -L -X PUT https://test-reports.behave.pro/REST/1.0/bdd/report \
+    #           -H "X-API-KEY: ${BEHAVE_PRO_TOKEN}" \
+    #           -H "X-COMMIT-ID: ${CI_COMMIT_SHA}" \
+    #           -H "X-BUILD-ID: ${CI_PIPELINE_IID}" \
+    #           -H "X-BUILD-URL: ${CI_PIPELINE_URL}" \
+    #           --data-binary @./$FILE;
+    #     done
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: accessibility-result
+      #     path: accessibility.json
+      #     retention-days: 5
