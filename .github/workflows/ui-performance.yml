@@ -3,6 +3,10 @@ name: Called Workflow - UI Performance
 
 on:
   workflow_call:
+    inputs:
+      PERFORMANCE_URL:
+        required: true
+        type: string
 
 jobs:
   run-sitespeed:
@@ -12,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run sitespeed.io container with arguments and optional Docker options
-        run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:25.11.0 https://www.sitespeed.io --outputFolder sitespeed-result https://konomo-test.hack.cloudnative.nttdatauk.cloud/ -b chrome
+        run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:25.11.0 https://www.sitespeed.io --outputFolder sitespeed-result ${{ inputs.PERFORMANCE_URL }} -b chrome
 
       - name: Move Result
         run: mv /sitespeed.io/sitespeed-result/data/performance.json browser-performance.json
