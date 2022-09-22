@@ -20,7 +20,8 @@ jobs:
 
       - name: Move Result
         run: |
-          ls -a /sitespeed.io/sitespeed-result/
+          ls -a sitespeed-result/
+          ls -a sitespeed.io/sitespeed-result/
           mv /sitespeed.io/sitespeed-result/data/performance.json browser-performance.json
 
       - name: Upload Artifact
