@@ -28,6 +28,7 @@ jobs:
         run: npm install maven
 
       - name: Run Script
+        continue-on-error: true
         run: |
           sed -i s~REPLACE_WITH_PREVIEW_URL~${{ inputs.URL }}~ ${{ inputs.TESTING_ROOT }}/conf/env.conf
           cat ${{ inputs.TESTING_ROOT }}/conf/env.conf
