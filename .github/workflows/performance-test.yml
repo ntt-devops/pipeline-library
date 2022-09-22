@@ -28,7 +28,7 @@ jobs:
         run: xk6 build --with github.com/mstoykov/xk6-counter@latest
 
       - name: Run k6 extension test
-        run: K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6 run ./loadtest/backend-test.js -o output-prometheus-remote
+        run: sudo K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6 run ./loadtest/backend-test.js -o output-prometheus-remote
 
       # - name: Upload Artifact
       #   uses: actions/upload-artifact@v3
