@@ -7,9 +7,9 @@ on:
 jobs:
   run-sitespeed:
     runs-on: ubuntu-latest
-    name: Run sitespeed.io
+    name: UI Performance
     steps:
       - uses: actions/checkout@v2
 
-      - name: Running sitespeed.io container with arguments and optional Docker options
+      - name: Run sitespeed.io container with arguments and optional Docker options
         run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:25.11.0 https://www.sitespeed.io --outputFolder sitespeed-result https://konomo-dea.dea.cloudnative.nttdatauk.cloud/ -b chrome
