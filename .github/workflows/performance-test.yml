@@ -16,28 +16,28 @@ jobs:
     name: Performance Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+      # - name: Checkout
+      #   uses: actions/checkout@v1
 
-      - name: Run k6 local test
-        uses: grafana/k6-action@v0.2.0
-        with:
-          filename: ${{ inputs.LOAD_TEST_FILE }}
-          flags: --env K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write
+      # - name: Run k6 local test
+      #   uses: grafana/k6-action@v0.2.0
+      #   with:
+      #     filename: ${{ inputs.LOAD_TEST_FILE }}
+      #     flags: --env K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write
     # container: docker://golang:1.17-alpine
 
     # steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
 
-    #   - name: Install xk6
-    #     run: go install go.k6.io/xk6/cmd/xk6@latest
+      - name: Install xk6
+        run: go install go.k6.io/xk6/cmd/xk6@latest
 
-    #   - name: Build xk6-counter binary
-    #     run: xk6 build --with github.com/grafana/xk6-output-prometheus-remote
+      - name: Build xk6-counter binary
+        run: xk6 build --with github.com/grafana/xk6-output-prometheus-remote@latest
 
-    #   - name: Run k6 extension test
-    #     run: K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write ./k6 run ./loadtest/backend-test.js -o output-prometheus-remote --force
+      - name: Run k6 extension test
+        run: K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write K6_PROMETHEUS_INSECURE_SKIP_TLS_VERIFY=false ./k6 run ./loadtest/backend-test.js -o output-prometheus-remote --force
 
       # - name: Upload Artifact
       #   uses: actions/upload-artifact@v3
