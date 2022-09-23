@@ -39,9 +39,9 @@ jobs:
       - name: Run k6 extension test
         run: K6_PROMETHEUS_REMOTE_URL=https://prometheus.hack.cloudnative.nttdatauk.cloud/api/v1/write K6_PROMETHEUS_INSECURE_SKIP_TLS_VERIFY=false ./k6/k6 run ./loadtest/backend-test.js -o output-prometheus-remote
 
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ inputs.ENVIRONMENT }}-result.html
-      #     path: ${{ inputs.ENVIRONMENT }}-result.html
-      #     retention-days: 5
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.ENVIRONMENT }}-result.html
+          path: ${{ inputs.ENVIRONMENT }}-result.html
+          retention-days: 5
