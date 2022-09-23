@@ -12,6 +12,7 @@ jobs:
   accessibility:
     runs-on: ubuntu-latest
     name: Accessibility Test
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
 

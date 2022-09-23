@@ -21,6 +21,7 @@ jobs:
   acceptance_test:
     runs-on: ubuntu-latest
     name: Acceptance Test
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
 

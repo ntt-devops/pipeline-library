@@ -22,6 +22,7 @@ jobs:
   container_scan:
     name: Container Image Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
