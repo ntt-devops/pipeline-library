@@ -25,7 +25,7 @@ jobs:
       - name: Create Variable 
         id: variable
         run: |
-          echo "CIDR_LIST=`$(cat cidr.txt)`" >> $GITHUB_ENV
+          echo "CIDR_LIST=$(cat cidr.txt)" >> $GITHUB_ENV
           # echo "::set-output name=CIDR_LIST::$CIDRS" >> $GITHUB_OUTPUT
 
       - name: Output List Variable
