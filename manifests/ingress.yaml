@@ -1,0 +1,37 @@
+# Source: test/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  labels:
+    helm.sh/chart: test-0.1.0
+    app.kubernetes.io/name: test
+    app.kubernetes.io/instance: test
+    app: test
+    tier: test
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-2:370849260309:certificate/5c7ee9f7-2c56-4a85-8e86-416de76365e2
+    alb.ingress.kubernetes.io/group.name: test
+    alb.ingress.kubernetes.io/healthcheck-path: /health-check
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/inbound-cidrs: ${CIDRS}
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+spec:
+  rules:
+    - host: "acm-test.dea.cloudnative.nttdatauk.cloud"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 3000

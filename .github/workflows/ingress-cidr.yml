@@ -1,0 +1,52 @@
+---
+name: Apply Inbound CIDRs to Ingress
+
+on:
+  push:
+    branches: 
+      - 'main'
+    paths:
+      - 'cidr.txt'
+
+jobs:
+  check_list:
+    name: Update CIDRs in Ingress
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check CIDRs list
+        run: cat cidr.txt
+
+      - name: Create Variable 
+        id: variable
+        run: echo "CIDR_LIST=$(cat cidr.txt)" >> $GITHUB_OUTPUT
+
+      - name: Output List Variable
+        run: echo "${{ steps.variable.outputs.CIDR_LIST}}"
+      # - name: Configure DEA AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.DEA_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.DEA_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
+      #     mask-aws-account-id: "no"
+
+      - uses: swdotcom/update-and-apply-kubernetes-configs@v1
+        with:
+          k8-config-file-paths: |
+            manifests/ingress.yaml
+          replacement-method: defined
+        env:
+          CIDRS: ${{ steps.variable.outputs.CIDR_LIST }}
+      
+
+
+      # - name: 'Upload Artifact1'
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: sast-code-results.json
+      #     path: sast-code-results.json
+      #     retention-days: 5
