@@ -25,11 +25,11 @@ jobs:
       - name: Create Variable 
         id: variable
         run: |
-          CIDR_LIST=$(cat cidr.txt)
-          echo "::set-output name=container::$CIDR_LIST" >> $GITHUB_OUTPUT
+          CIDRS="$(cat cidr.txt)"
+          echo "::set-output name=CIDR_LIST::$CIDRS" >> $GITHUB_OUTPUT
 
       - name: Output List Variable
-        run: echo "${{ steps.variable.outputs.CIDR_LIST}}"
+        run: echo "${{ steps.variable.outputs.CIDR_LIST }}"
       # - name: Configure DEA AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
