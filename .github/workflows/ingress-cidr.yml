@@ -24,7 +24,9 @@ jobs:
 
       - name: Create Variable 
         id: variable
-        run: echo "::set-output name=container::CIDR_LIST=$(cat cidr.txt)" >> $GITHUB_OUTPUT
+        run: |
+          CIDR_LIST=$(cat cidr.txt)
+          echo "::set-output name=container::$CIDR_LIST" >> $GITHUB_OUTPUT
 
       - name: Output List Variable
         run: echo "${{ steps.variable.outputs.CIDR_LIST}}"
