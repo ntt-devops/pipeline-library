@@ -13,6 +13,8 @@ jobs:
     name: Update CIDRs in Ingress
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      container: ${{ steps.variable.outputs.CIDR_LIST }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +24,7 @@ jobs:
 
       - name: Create Variable 
         id: variable
-        run: echo "CIDR_LIST=$(cat cidr.txt)" >> $GITHUB_OUTPUT
+        run: echo "::set-output name=container::CIDR_LIST=$(cat cidr.txt)" >> $GITHUB_OUTPUT
 
       - name: Output List Variable
         run: echo "${{ steps.variable.outputs.CIDR_LIST}}"
