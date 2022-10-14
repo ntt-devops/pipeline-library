@@ -39,10 +39,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           mask-aws-account-id: "no"
 
-      - name: Set Context
-        run: |
-          kubectl config set-context arn:aws:eks:eu-west-2:370849260309:cluster/dea-01
-          kubectl get namespaces
+    - uses: tale/kubectl-action@v1
+      with:
+        base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+    - run: kubectl get namespaces
       
       - uses: swdotcom/update-and-apply-kubernetes-configs@v1
         with:
