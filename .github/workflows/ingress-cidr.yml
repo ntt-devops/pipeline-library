@@ -30,14 +30,17 @@ jobs:
 
       - name: Output List Variable
         run: echo "${{ env.CIDR_LIST }}"
-      # - name: Configure DEA AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.DEA_AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.DEA_AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
-      #     mask-aws-account-id: "no"
 
+      - name: Configure DEA AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.DEA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          mask-aws-account-id: "no"
+
+      - name: Set Context
+        run: kubectl config set-context arn:aws:eks:eu-west-2:370849260309:cluster/dea-01
       - uses: swdotcom/update-and-apply-kubernetes-configs@v1
         with:
           k8-config-file-paths: |
